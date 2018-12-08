@@ -3,10 +3,9 @@ apply plugin: 'kotlin-android'
 
 ext {
     appName = 'Tachiyomi: Mangaeden'
-    pkgNameSuffix = "en.mangaeden"
+    pkgNameSuffix = 'en.mangaeden'
     extClass = '.Mangaeden'
     extVersionCode = 1
-    extVersionSuffix = 1
     libVersion = '1.0'
 }
 

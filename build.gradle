@@ -1,10 +1,11 @@
 buildscript {
-    ext.kotlin_version = '1.1.2'
+    ext.kotlin_version = '1.2.71'
     repositories {
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -12,7 +13,9 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        google()
         maven { url 'https://dl.bintray.com/inorichi/tachiyomi' }
+        maven { url "https://jitpack.io" }
     }
 }
 

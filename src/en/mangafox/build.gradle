@@ -3,11 +3,10 @@ apply plugin: 'kotlin-android'
 
 ext {
     appName = 'Tachiyomi: Mangafox'
-    pkgNameSuffix = "en.mangafox"
+    pkgNameSuffix = 'en.mangafox'
     extClass = '.Mangafox'
-    extVersionCode = 1
-    extVersionSuffix = 1
-    libVersion = '1.0'
+    extVersionCode = 3
+    libVersion = '1.2'
 }
 
 apply from: "$rootDir/common.gradle"

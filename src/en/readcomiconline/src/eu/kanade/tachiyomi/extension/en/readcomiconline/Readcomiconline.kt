@@ -17,7 +17,7 @@ class Readcomiconline : ParsedHttpSource() {
 
     override val name = "ReadComicOnline"
 
-    override val baseUrl = "http://readcomiconline.to"
+    override val baseUrl = "https://readcomiconline.to"
 
     override val lang = "en"
 
@@ -34,7 +34,7 @@ class Readcomiconline : ParsedHttpSource() {
     }
 
     override fun latestUpdatesRequest(page: Int): Request {
-        return GET("http://readcomiconline.to/ComicList/LatestUpdate?page=$page", headers)
+        return GET("https://readcomiconline.to/ComicList/LatestUpdate?page=$page", headers)
     }
 
     override fun popularMangaFromElement(element: Element): SManga {
@@ -50,7 +50,7 @@ class Readcomiconline : ParsedHttpSource() {
         return popularMangaFromElement(element)
     }
 
-    override fun popularMangaNextPageSelector() = "li > a:contains(› Next)"
+    override fun popularMangaNextPageSelector() = "li > a:contains(Next)"
 
     override fun latestUpdatesNextPageSelector(): String = "ul.pager > li > a:contains(Next)"
 
@@ -86,7 +86,7 @@ class Readcomiconline : ParsedHttpSource() {
         manga.genre = infoElement.select("p:has(span:contains(Genres:)) > *:gt(0)").text()
         manga.description = infoElement.select("p:has(span:contains(Summary:)) ~ p").text()
         manga.status = infoElement.select("p:has(span:contains(Status:))").first()?.text().orEmpty().let { parseStatus(it) }
-        manga.thumbnail_url = document.select(".rightBox:eq(0) img").first()?.attr("src")
+        manga.thumbnail_url = document.select(".rightBox:eq(0) img").first()?.absUrl("src")
         return manga
     }
 
@@ -110,13 +110,13 @@ class Readcomiconline : ParsedHttpSource() {
         return chapter
     }
 
-    override fun pageListRequest(chapter: SChapter) = POST(baseUrl + chapter.url, headers)
+    override fun pageListRequest(chapter: SChapter) = POST(baseUrl + chapter.url+"&quality=hq", headers)
 
     override fun pageListParse(response: Response): List<Page> {
         val pages = mutableListOf<Page>()
         //language=RegExp
         val p = Pattern.compile("""lstImages.push\("(.+?)"""")
-        val m = p.matcher(response.body().string())
+        val m = p.matcher(response.body()!!.string())
 
         var i = 0
         while (m.find()) {
@@ -145,7 +145,7 @@ class Readcomiconline : ParsedHttpSource() {
     )
 
     // $("select[name=\"genres\"]").map((i,el) => `Genre("${$(el).next().text().trim()}", ${i})`).get().join(',\n')
-    // on http://readcomiconline.to/AdvanceSearch
+    // on https://readcomiconline.to/AdvanceSearch
     private fun getGenreList() = listOf(
             Genre("Action"),
             Genre("Adventure"),

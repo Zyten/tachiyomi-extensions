@@ -1,0 +1,12 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+ext {
+    appName = 'Tachiyomi: RawLH'
+    pkgNameSuffix = 'ja.rawlh'
+    extClass = '.Rawlh'
+    extVersionCode = 7
+    libVersion = '1.2'
+}
+
+apply from: "$rootDir/common.gradle"

@@ -3,11 +3,10 @@ apply plugin: 'kotlin-android'
 
 ext {
     appName = 'Tachiyomi: Webtoons'
-    pkgNameSuffix = "en.webtoons"
+    pkgNameSuffix = 'en.webtoons'
     extClass = '.Webtoons'
-    extVersionCode = 1
-    extVersionSuffix = 1
-    libVersion = '1.0'
+    extVersionCode = 5
+    libVersion = '1.2'
 }
 
 apply from: "$rootDir/common.gradle"

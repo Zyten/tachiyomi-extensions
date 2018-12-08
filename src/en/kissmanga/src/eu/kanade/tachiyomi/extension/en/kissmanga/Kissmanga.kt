@@ -5,10 +5,7 @@ import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.POST
 import eu.kanade.tachiyomi.source.model.*
 import eu.kanade.tachiyomi.source.online.ParsedHttpSource
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import java.text.SimpleDateFormat
@@ -20,13 +17,18 @@ class Kissmanga : ParsedHttpSource() {
 
     override val name = "Kissmanga"
 
-    override val baseUrl = "http://kissmanga.com"
+    override val baseUrl = "https://kissmanga.com"
 
     override val lang = "en"
 
     override val supportsLatest = true
 
     override val client: OkHttpClient = network.cloudflareClient
+
+    override fun headersBuilder(): Headers.Builder {
+        return Headers.Builder()
+                .add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) Gecko/20100101 Firefox/60")
+    }
 
     override fun popularMangaSelector() = "table.listing tr:gt(1)"
 
@@ -37,14 +39,39 @@ class Kissmanga : ParsedHttpSource() {
     }
 
     override fun latestUpdatesRequest(page: Int): Request {
-        return GET("http://kissmanga.com/MangaList/LatestUpdate?page=$page", headers)
+        return GET("https://kissmanga.com/MangaList/LatestUpdate?page=$page", headers)
     }
 
     override fun popularMangaFromElement(element: Element): SManga {
         val manga = SManga.create()
         element.select("td a:eq(0)").first().let {
             manga.setUrlWithoutDomain(it.attr("href"))
-            manga.title = it.text()
+            val title = it.text()
+            //check if cloudfire email obfuscation is affecting title name
+            if (title.contains("[email protected]", true)) {
+                try {
+                    var str: String = it.html()
+                    //get the  number
+                    str = str.substringAfter("data-cfemail=\"")
+                    str = str.substringBefore("\">[email")
+                    val sb = StringBuilder()
+                    //convert number to char
+                    val r = Integer.valueOf(str.substring(0, 2), 16)!!
+                    var i = 2
+                    while (i < str.length) {
+                        val c = (Integer.valueOf(str.substring(i, i + 2), 16) xor r).toChar()
+                        sb.append(c)
+                        i += 2
+                    }
+                    //replace the new word into the title
+                    manga.title = title.replace("[email protected]", sb.toString(), true)
+                } catch (e: Exception) {
+                    //on error just default to obfuscated title
+                    manga.title = title
+                }
+            } else {
+                manga.title = title
+            }
         }
         return manga
     }
@@ -129,7 +156,7 @@ class Kissmanga : ParsedHttpSource() {
 
             // There are two functions in an inline script needed to decrypt the urls. We find and
             // execute them.
-            var p = Pattern.compile("(.*CryptoJS.*)")
+            var p = Pattern.compile("(var.*CryptoJS.*)")
             var m = p.matcher(body)
             while (m.find()) {
                 it.evaluate(m.group(1))
@@ -169,7 +196,7 @@ class Kissmanga : ParsedHttpSource() {
     )
 
     // $("select[name=\"genres\"]").map((i,el) => `Genre("${$(el).next().text().trim()}", ${i})`).get().join(',\n')
-    // on http://kissmanga.com/AdvanceSearch
+    // on https://kissmanga.com/AdvanceSearch
     private fun getGenreList() = listOf(
             Genre("4-Koma"),
             Genre("Action"),
@@ -186,6 +213,7 @@ class Kissmanga : ParsedHttpSource() {
             Genre("Harem"),
             Genre("Historical"),
             Genre("Horror"),
+            Genre("Isekai"),
             Genre("Josei"),
             Genre("Lolicon"),
             Genre("Manga"),
@@ -199,7 +227,6 @@ class Kissmanga : ParsedHttpSource() {
             Genre("Mystery"),
             Genre("One shot"),
             Genre("Psychological"),
-            Genre("Reincarnation"),
             Genre("Romance"),
             Genre("School Life"),
             Genre("Sci-fi"),
@@ -213,9 +240,7 @@ class Kissmanga : ParsedHttpSource() {
             Genre("Smut"),
             Genre("Sports"),
             Genre("Supernatural"),
-            Genre("Time Travel"),
             Genre("Tragedy"),
-            Genre("Transported"),
             Genre("Webtoon"),
             Genre("Yaoi"),
             Genre("Yuri")

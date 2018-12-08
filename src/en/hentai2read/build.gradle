@@ -5,9 +5,8 @@ ext {
     appName = 'Tachiyomi: Hentai2Read'
     pkgNameSuffix = 'en.hentai2read'
     extClass = '.Hentai2Read'
-    extVersionCode = 2
-    extVersionSuffix = 1
-    libVersion = '1.0'
+    extVersionCode = 3
+    libVersion = '1.2'
 }
 
 apply from: "$rootDir/common.gradle"

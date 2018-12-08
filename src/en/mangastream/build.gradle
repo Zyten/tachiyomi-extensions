@@ -3,10 +3,9 @@ apply plugin: 'kotlin-android'
 
 ext {
     appName = 'Tachiyomi: Mangastream'
-    pkgNameSuffix = "en.mangastream"
+    pkgNameSuffix = 'en.mangastream'
     extClass = '.Mangastream'
-    extVersionCode = 1
-    extVersionSuffix = 1
+    extVersionCode = 2
     libVersion = '1.0'
 }
 

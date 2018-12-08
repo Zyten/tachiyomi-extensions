@@ -3,16 +3,15 @@ apply plugin: 'kotlin-android'
 
 ext {
     appName = 'Tachiyomi: nhentai'
-    pkgNameSuffix = "all.nhentai"
+    pkgNameSuffix = 'all.nhentai'
     extClass = '.NHJapanese; .NHEnglish; .NHChinese; .NHSpeechless; .NHCzech; .NHEsperanto; .NHMongolian; .NHSlovak; .NHArabic; .NHUkrainian'
-    extVersionCode = 1
-    extVersionSuffix = 1
-    libVersion = '1.0'
+    extVersionCode = 2
+    libVersion = '1.2'
 }
 
 dependencies {
-    provided "com.google.code.gson:gson:2.8.0"
-    provided "com.github.salomonbrys.kotson:kotson:2.5.0"
+    compileOnly 'com.google.code.gson:gson:2.8.2'
+    compileOnly 'com.github.salomonbrys.kotson:kotson:2.5.0'
 }
 
 apply from: "$rootDir/common.gradle"

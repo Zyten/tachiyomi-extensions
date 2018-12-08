@@ -3,10 +3,9 @@ apply plugin: 'kotlin-android'
 
 ext {
     appName = 'Tachiyomi: Mangazuki'
-    pkgNameSuffix = "en.mangazuki"
+    pkgNameSuffix = 'en.mangazuki'
     extClass = '.Mangazuki'
-    extVersionCode = 1
-    extVersionSuffix = 1
+    extVersionCode = 2
     libVersion = '1.0'
 }
 

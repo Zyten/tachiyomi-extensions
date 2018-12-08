@@ -3,11 +3,10 @@ apply plugin: 'kotlin-android'
 
 ext {
     appName = 'Tachiyomi: Sen Manga'
-    pkgNameSuffix = "ja.senmanga"
+    pkgNameSuffix = 'ja.senmanga'
     extClass = '.SenManga'
-    extVersionCode = 1
-    extVersionSuffix = 1
-    libVersion = '1.0'
+    extVersionCode = 2
+    libVersion = '1.2'
 }
 
 apply from: "$rootDir/common.gradle"
